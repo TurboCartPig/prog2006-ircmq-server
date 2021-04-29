@@ -1,27 +1,20 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.34.2.
 --
 -- see: https://github.com/sol/hpack
 
 name:           server-haskell
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/server-haskell#readme>
-homepage:       https://github.com/githubuser/server-haskell#readme
-bug-reports:    https://github.com/githubuser/server-haskell/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2021 Author name here
+description:    Chat server based on zeromq.
+author:         ircmq-boys
+maintainer:     sebbern@stud.ntnu.no
+copyright:      2021 Dennis Kristiansen, Sebastian Lindtvedt, Salvador Bascunan
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
-    ChangeLog.md
-
-source-repository head
-  type: git
-  location: https://github.com/githubuser/server-haskell
 
 library
   exposed-modules:
@@ -31,10 +24,8 @@ library
   hs-source-dirs:
       src
   build-depends:
-      async
-    , base >=3 && <5
+      base >=3 && <5
     , containers
-    , monad-control
     , zeromq4-haskell
   default-language: Haskell2010
 
@@ -46,10 +37,8 @@ executable server-haskell-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      async
-    , base >=3 && <5
+      base >=3 && <5
     , containers
-    , monad-control
     , server-haskell
     , zeromq4-haskell
   default-language: Haskell2010
@@ -63,10 +52,8 @@ test-suite server-haskell-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      async
-    , base >=3 && <5
+      base >=3 && <5
     , containers
-    , monad-control
     , server-haskell
     , zeromq4-haskell
   default-language: Haskell2010
