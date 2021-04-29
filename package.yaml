@@ -13,6 +13,7 @@ description:         Chat server based on zeromq.
 dependencies:
 - base >= 3 && < 5
 - containers
+- bytestring
 - zeromq4-haskell
 
 library:
