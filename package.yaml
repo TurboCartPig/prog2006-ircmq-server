@@ -20,7 +20,11 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/githubuser/server-haskell#readme>
 
 dependencies:
-- base >= 4.7 && < 5
+- base >= 3 && < 5
+- containers
+- async
+- monad-control
+- zeromq4-haskell
 
 library:
   source-dirs: src
