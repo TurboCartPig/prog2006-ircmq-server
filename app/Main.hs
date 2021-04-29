@@ -19,8 +19,8 @@ main = runZMQ $ do
     forever $ do
         buffer <- receive responder
         -- FIXME: Convert ByteString to String
-        -- liftIO $ do
-        --     putStrLn (B.append (B.pack "Received: ") buffer)
+        liftIO (putStrLn $ B.unpack buffer)
+
         send responder [] "ACK"
 
         send publisher [SendMore] "A"
