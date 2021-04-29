@@ -21,7 +21,7 @@ main = runZMQ $ do
         -- Get new message from a client
         buffer <- receive responder
 
-        liftIO (putStrLn $ B.unpack buffer)
+        liftIO (putStrLn $ "Received: " ++ B.unpack buffer)
 
         send responder [] "ACK"
 
