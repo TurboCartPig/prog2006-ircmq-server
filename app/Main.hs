@@ -23,4 +23,5 @@ main = runZMQ $ do
         --     putStrLn (B.append (B.pack "Received: ") buffer)
         send responder [] "ACK"
 
+        send publisher [SendMore] "A"
         send publisher [] buffer
