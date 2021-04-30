@@ -1,11 +1,29 @@
+{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
 
 import           Control.Concurrent
 import           Control.Monad
+import           Data.Aeson
 import qualified Data.ByteString.Char8 as B
+import           GHC.Generics
 import           System.ZMQ4.Monadic
+
+-- | Messages to be serialized and sent to the client.
+data MessageType
+  -- | Initial message sent when a client first connects.
+  = Hello { name :: String, channel :: String }
+  -- | A text message sent from a client to all other clients.
+  | Message { name :: String, channel :: String, content :: String }
+  -- | Final message from a client, notifying the server, that the client is disconnecting.
+  | Goodbye { name :: String, channel :: String }
+  deriving(Generic, Show)
+
+instance ToJSON MessageType where
+  toEncoding = genericToEncoding defaultOptions
+
+instance FromJSON MessageType
 
 main :: IO ()
 main = runZMQ $ do

@@ -24,7 +24,8 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >=3 && <5
+      aeson >=1.5 && <1.6
+    , base >=3 && <5
     , bytestring
     , containers
     , zeromq4-haskell
@@ -38,7 +39,8 @@ executable server-haskell-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=3 && <5
+      aeson >=1.5 && <1.6
+    , base >=3 && <5
     , bytestring
     , containers
     , server-haskell
@@ -54,7 +56,8 @@ test-suite server-haskell-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=3 && <5
+      aeson >=1.5 && <1.6
+    , base >=3 && <5
     , bytestring
     , containers
     , server-haskell

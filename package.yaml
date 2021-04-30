@@ -15,6 +15,7 @@ dependencies:
 - containers
 - bytestring
 - zeromq4-haskell
+- aeson >= 1.5 && < 1.6
 
 library:
   source-dirs: src
