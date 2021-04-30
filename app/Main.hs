@@ -8,6 +8,7 @@ import           Control.Monad
 import           Data.Aeson
 import qualified Data.ByteString.Char8 as B
 import           GHC.Generics
+import qualified Data.Map as Map
 import           System.ZMQ4.Monadic
 
 -- | Messages to be serialized and sent to the client.
@@ -23,7 +24,9 @@ data MessageType
 instance ToJSON MessageType where
   toEncoding = genericToEncoding defaultOptions
 
-instance FromJSON MessageType
+instance FromJSON MessageType where
+
+type ChannelParticipants = Map.Map String [String]
 
 main :: IO ()
 main = runZMQ $ do
@@ -39,7 +42,12 @@ main = runZMQ $ do
         -- Get new message from a client
         buffer <- receive responder
 
-        liftIO (putStrLn $ "Received: " ++ B.unpack buffer)
+        let json = decodeStrict buffer :: Maybe MessageType
+
+        case json of
+          Just (Message name ch content) -> liftIO (putStrLn $ "Received: " ++ content)
+          _ -> liftIO (putStrLn "NOT A MESSAGE")
+
 
         send responder [] "ACK"
 
