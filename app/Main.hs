@@ -38,6 +38,7 @@ main = runZMQ $ do
     publisher <- socket Pub
     bind publisher "tcp://*:6666"
 
+    let channels = Map.empty
     forever $ do
         -- Get new message from a client
         buffer <- receive responder
@@ -45,12 +46,27 @@ main = runZMQ $ do
         let json = decodeStrict buffer :: Maybe MessageType
 
         case json of
-          Just (Message name ch content) -> liftIO (putStrLn $ "Received: " ++ content)
+          Just (Hello   name ch) -> do 
+            let channels = insertChannelParticipant channels name ch
+            liftIO (putStrLn $ "New participant registered to channel " ++ ch)
+          Just (Message name ch content) -> liftIO (putStrLn $ name ++ ": " ++ content)
           _ -> liftIO (putStrLn "NOT A MESSAGE")
-
 
         send responder [] "ACK"
 
         -- Publish the message for all clients to see, on the topic/channel "A"
         send publisher [SendMore] "A"
-        send publisher [] buffer
+        send publisher [] buffer 
+
+
+insertChannelParticipant :: ChannelParticipants -> String -> String -> ChannelParticipants 
+insertChannelParticipant channels name ch = do 
+  let res = Map.lookup ch channels
+  case res of 
+    Just chn -> do 
+      let new_channel = name : chn
+      Map.insert ch new_channel channels
+    Nothing  -> do 
+      Map.insert ch [name] channels
+  return channels 
+  
