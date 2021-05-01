@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -Wall #-}
 
 module Main where
 
@@ -26,7 +27,7 @@ instance ToJSON MessageType where
 
 instance FromJSON MessageType where
 
-type ChannelParticipants = Map.Map String [String]
+newtype ChannelParticipants = ChannelParticipants (MVar (Map.Map String [String]))
 
 main :: IO ()
 main = runZMQ $ do
@@ -38,7 +39,7 @@ main = runZMQ $ do
     publisher <- socket Pub
     bind publisher "tcp://*:6666"
 
-    let channels = Map.empty
+    channels <- liftIO newChannelMap
     forever $ do
         -- Get new message from a client
         buffer <- receive responder
@@ -46,9 +47,7 @@ main = runZMQ $ do
         let json = decodeStrict buffer :: Maybe MessageType
 
         case json of
-          Just (Hello   name ch) -> do 
-            let channels = insertChannelParticipant channels name ch
-            liftIO (putStrLn $ "New participant registered to channel " ++ ch)
+          Just (Hello   name ch) -> liftIO $ insertChannelParticipant channels name ch
           Just (Message name ch content) -> liftIO (putStrLn $ name ++ ": " ++ content)
           _ -> liftIO (putStrLn "NOT A MESSAGE")
 
@@ -59,14 +58,23 @@ main = runZMQ $ do
         send publisher [] buffer 
 
 
-insertChannelParticipant :: ChannelParticipants -> String -> String -> ChannelParticipants 
-insertChannelParticipant channels name ch = do 
+insertChannelParticipant :: ChannelParticipants -> String -> String  -> IO () 
+insertChannelParticipant (ChannelParticipants cp) name ch = do 
+  channels <- takeMVar cp
   let res = Map.lookup ch channels
   case res of 
     Just chn -> do 
       let new_channel = name : chn
-      Map.insert ch new_channel channels
+      let channels' = Map.insert ch new_channel channels
+      putMVar cp channels'
+      putStrLn ("New participant added to the old channel: " ++ ch)
     Nothing  -> do 
-      Map.insert ch [name] channels
-  return channels 
+      let channels' = Map.insert ch [name] channels
+      putMVar cp channels'
+      putStrLn ("New participant added to the new channel: " ++ ch)
   
+  
+newChannelMap :: IO ChannelParticipants 
+newChannelMap = do 
+  m <- newMVar (Map.empty)
+  return (ChannelParticipants m)
