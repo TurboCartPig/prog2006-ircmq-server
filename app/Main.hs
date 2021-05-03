@@ -7,6 +7,7 @@ import           Control.Concurrent
 import           Control.Monad
 import           Data.Aeson
 import qualified Data.ByteString.Char8 as B
+import qualified Data.ByteString.Lazy  as C
 import           GHC.Generics
 import qualified Data.Map as Map
 import           System.ZMQ4.Monadic
@@ -59,10 +60,10 @@ main = runZMQ $ do
             liftIO (putStrLn $ n ++ ": " ++ cont)
             -- Publish the message for all clients to see, on the topic/channel 'ch'
             send publisher [SendMore] (B.pack ch)
-            send publisher [] (B.pack (show (Message { name = n, channel = ch, content = cont})))
+            send publisher [] (C.toStrict (encode (Message { name = n, channel = ch, content = cont})))
           Just (RequestMembers ch) -> do
             participants <- liftIO (fetchChannelParticipants channels ch)
-            send responder [] (B.pack (show (ResponseMembers {members = participants})))
+            send responder [] (C.toStrict ( encode (ResponseMembers {members = participants})))
           _ -> liftIO (putStrLn "NOT A MESSAGE")
 
 
