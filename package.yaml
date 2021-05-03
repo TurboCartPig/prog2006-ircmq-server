@@ -16,6 +16,7 @@ dependencies:
 - bytestring
 - zeromq4-haskell
 - aeson >= 1.5 && < 1.6
+- mtl
 
 library:
   source-dirs: src
