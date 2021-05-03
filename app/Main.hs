@@ -59,7 +59,7 @@ main = runZMQ $ do
             liftIO (putStrLn $ name ++ ": " ++ content)
             -- Publish the message for all clients to see, on the topic/channel 'ch'
             send publisher [SendMore] (B.pack ch)
-            send publisher [] (B.pack $ name ++ ": " ++ content)
+            send publisher [] (B.pack (show $ encode (Message { name = name, channel = ch, content = content})))
           Just (RequestMembers ch) -> do
             participants <- liftIO (fetchChannelParticipants channels ch)
             send responder [] (B.pack (show $ encode (ResponseMembers {members = participants})))
