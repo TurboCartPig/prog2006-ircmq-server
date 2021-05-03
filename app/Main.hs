@@ -1,6 +1,5 @@
 {-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# OPTIONS_GHC -Wall #-}
 
 module Main where
 
@@ -43,19 +42,18 @@ main = runZMQ $ do
     forever $ do
         -- Get new message from a client
         buffer <- receive responder
-
+        send responder [] "ACK"
+        
         let json = decodeStrict buffer :: Maybe MessageType
 
         case json of
           Just (Hello   name ch) -> liftIO $ insertChannelParticipant channels name ch
-          Just (Message name ch content) -> liftIO (putStrLn $ name ++ ": " ++ content)
+          Just (Message name ch content) -> do
+            liftIO (putStrLn $ name ++ ": " ++ content)
+            -- Publish the message for all clients to see, on the topic/channel "A"
+            send publisher [SendMore] (B.pack ch)
+            send publisher [] (B.pack $ name ++ ": " ++ content)
           _ -> liftIO (putStrLn "NOT A MESSAGE")
-
-        send responder [] "ACK"
-
-        -- Publish the message for all clients to see, on the topic/channel "A"
-        send publisher [SendMore] "A"
-        send publisher [] buffer 
 
 
 insertChannelParticipant :: ChannelParticipants -> String -> String  -> IO () 
