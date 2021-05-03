@@ -59,10 +59,10 @@ main = runZMQ $ do
             liftIO (putStrLn $ n ++ ": " ++ cont)
             -- Publish the message for all clients to see, on the topic/channel 'ch'
             send publisher [SendMore] (B.pack ch)
-            send publisher [] (B.pack (show $ encode (Message { name = n, channel = ch, content = cont})))
+            send publisher [] (B.pack (show (Message { name = n, channel = ch, content = cont})))
           Just (RequestMembers ch) -> do
             participants <- liftIO (fetchChannelParticipants channels ch)
-            send responder [] (B.pack (show $ encode (ResponseMembers {members = participants})))
+            send responder [] (B.pack (show (ResponseMembers {members = participants})))
           _ -> liftIO (putStrLn "NOT A MESSAGE")
 
 
