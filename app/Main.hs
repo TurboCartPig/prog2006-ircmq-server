@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
@@ -8,28 +7,9 @@ import           Control.Monad
 import           Data.Aeson
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.Lazy  as C
-import           GHC.Generics
-import qualified Data.Map as Map
+import qualified Data.Map              as Map
+import           Message
 import           System.ZMQ4.Monadic
-
--- | Messages to be serialized and sent to the client.
-data MessageType
-  -- | Initial message sent when a client first connects.
-  = Hello { name :: String, channel :: String }
-  -- | A text message sent from a client to all other clients.
-  | Message { name :: String, channel :: String, content :: String }
-  -- | A request to see all members in a given channel.
-  | RequestMembers { channel :: String }
-  -- | A response of all members present in a given channel
-  | ResponseMembers { members :: [String] }
-  -- | Final message from a client, notifying the server, that the client is disconnecting.
-  | Goodbye { name :: String, channel :: String }
-  deriving(Generic, Show)
-
-instance ToJSON MessageType where
-  toEncoding = genericToEncoding defaultOptions
-
-instance FromJSON MessageType where
 
 newtype ChannelParticipants = ChannelParticipants (MVar (Map.Map String [String]))
 
