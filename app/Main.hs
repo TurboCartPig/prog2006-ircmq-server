@@ -40,6 +40,13 @@ main = runZMQ $ do
             send responder [] "ACK"
             liftIO $ insertChannelParticipant channels name channel
 
+          -- Goodbye is the final message from the client,
+          -- so remove them from the channel participants and acknowledge the message.
+          Just (Goodbye name channel) -> do
+            send responder [] "ACK"
+            liftIO $ removeChannelParticipant channels name channel
+            liftIO $ putStrLn $ "FUCK"
+
           -- Acknowledge receiving the message,
           -- and pass it on to all clients.
           Just (Message name channel content) -> do
@@ -74,6 +81,23 @@ insertChannelParticipant (ChannelParticipants cp) name channel = do
       let channels' = Map.insert channel [name] channels
       putMVar cp channels'
       putStrLn ("New participant added to the new channel: " ++ channel)
+
+removeChannelParticipant :: ChannelParticipants -> String -> String -> IO ()
+removeChannelParticipant (ChannelParticipants cp) name channel = do
+  channels <- takeMVar cp
+  let res = Map.lookup channel channels
+  case res of
+    -- Remove from channel
+    Just chn -> do
+      let new_channel = filter (/= name) chn
+      let channels' = Map.insert channel new_channel channels
+      putMVar cp channels'
+      putStrLn $ "Removing participant from channel: " ++ channel
+
+    -- WTF?
+    Nothing -> do
+      putMVar cp channels
+      putStrLn $ "Tried to remove participant from non-existent channel: " ++ channel
 
 fetchChannelParticipants :: ChannelParticipants -> String -> IO [String]
 fetchChannelParticipants (ChannelParticipants cp) channel = do
