@@ -55,9 +55,11 @@ main = runZMQ $ do
             members <- liftIO (fetchChannelParticipants channels channel)
             send responder [] (C.toStrict . encode $ ResponseMembers { members })
 
-          _ -> liftIO (putStrLn "NOT A MESSAGE")
+          _ -> do
+            send responder [] "WHAT"
+            liftIO (putStrLn "NOT A MESSAGE")
 
-insertChannelParticipant :: ChannelParticipants -> String -> String  -> IO ()
+insertChannelParticipant :: ChannelParticipants -> String -> String -> IO ()
 insertChannelParticipant (ChannelParticipants cp) name channel = do
   channels <- takeMVar cp
   let res = Map.lookup channel channels
