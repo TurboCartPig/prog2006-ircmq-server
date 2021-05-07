@@ -1,3 +1,4 @@
+{-# LANGUAGE NamedFieldPuns    #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
@@ -24,53 +25,63 @@ main = runZMQ $ do
     bind publisher "tcp://*:6666"
 
     channels <- liftIO newChannelMap
+
     forever $ do
         -- Get new message from a client
         buffer <- receive responder
 
+        -- Deserialize the message into a MessageType
+        let message = decodeStrict buffer :: Maybe MessageType
 
-        let json = decodeStrict buffer :: Maybe MessageType
+        case message of
+          -- Hello is the first message from the client,
+          -- so add them to channel participants and acknowledge the message.
+          Just (Hello   name channel) -> do
+            send responder [] "ACK"
+            liftIO $ insertChannelParticipant channels name channel
 
-        case json of
-          Just (Hello   name ch) -> do
+          -- Acknowledge receiving the message,
+          -- and pass it on to all clients.
+          Just (Message name channel content) -> do
             send responder [] "ACK"
-            liftIO $ insertChannelParticipant channels name ch
-          Just (Message n ch cont) -> do
-            send responder [] "ACK"
-            liftIO (putStrLn $ n ++ ": " ++ cont)
-            -- Publish the message for all clients to see, on the topic/channel 'ch'
-            send publisher [SendMore] (B.pack ch)
-            send publisher [] (C.toStrict (encode (Message { name = n, channel = ch, content = cont})))
-          Just (RequestMembers ch) -> do
-            participants <- liftIO (fetchChannelParticipants channels ch)
-            send responder [] (C.toStrict ( encode (ResponseMembers {members = participants})))
+            liftIO (putStrLn $ name ++ ": " ++ content)
+
+            -- Publish the message for all clients to see, on the topic/channel `channel`
+            send publisher [SendMore] (B.pack channel)
+            send publisher [] (C.toStrict . encode $ Message { name, channel, content })
+
+          -- Give the client a list of all channel participants.
+          Just (RequestMembers channel) -> do
+            members <- liftIO (fetchChannelParticipants channels channel)
+            send responder [] (C.toStrict . encode $ ResponseMembers { members })
+
           _ -> liftIO (putStrLn "NOT A MESSAGE")
 
-
-insertChannelParticipant :: ChannelParticipants -> String -> String  -> IO () 
-insertChannelParticipant (ChannelParticipants cp) name ch = do 
+insertChannelParticipant :: ChannelParticipants -> String -> String  -> IO ()
+insertChannelParticipant (ChannelParticipants cp) name channel = do
   channels <- takeMVar cp
-  let res = Map.lookup ch channels
-  case res of 
-    Just chn -> do 
+  let res = Map.lookup channel channels
+  case res of
+    Just chn -> do
       let new_channel = name : chn
-      let channels' = Map.insert ch new_channel channels
+      let channels' = Map.insert channel new_channel channels
       putMVar cp channels'
-      putStrLn ("New participant added to the old channel: " ++ ch)
-    Nothing  -> do 
-      let channels' = Map.insert ch [name] channels
+      putStrLn ("New participant added to the old channel: " ++ channel)
+
+    Nothing  -> do
+      let channels' = Map.insert channel [name] channels
       putMVar cp channels'
-      putStrLn ("New participant added to the new channel: " ++ ch)
+      putStrLn ("New participant added to the new channel: " ++ channel)
 
 fetchChannelParticipants :: ChannelParticipants -> String -> IO [String]
-fetchChannelParticipants (ChannelParticipants cp) ch = do
+fetchChannelParticipants (ChannelParticipants cp) channel = do
   channels <- takeMVar cp
-  let res = Map.lookup ch channels
+  let res = Map.lookup channel channels
   case res of
     Just chn -> return chn
     Nothing  -> return []
-  
-newChannelMap :: IO ChannelParticipants 
-newChannelMap = do 
+
+newChannelMap :: IO ChannelParticipants
+newChannelMap = do
   m <- newMVar (Map.empty)
   return (ChannelParticipants m)
