@@ -13,7 +13,6 @@ import qualified Data.Map           as Map
 newtype ChannelParticipants = ChannelParticipants (MVar (Map.Map String [String]))
 
 -- | insertChannelParticipant - inserts a participant to a channel
---
 insertChannelParticipant :: ChannelParticipants -> String -> String -> IO ()
 insertChannelParticipant (ChannelParticipants cp) name channel = do
   channels <- takeMVar cp
@@ -31,7 +30,6 @@ insertChannelParticipant (ChannelParticipants cp) name channel = do
       putStrLn ("New participant added to the new channel: " ++ channel)
 
 -- | removeChannelParticipant - removes a participant from a channel
---
 removeChannelParticipant :: ChannelParticipants -> String -> String -> IO ()
 removeChannelParticipant (ChannelParticipants cp) name channel = do
   channels <- takeMVar cp
@@ -49,7 +47,6 @@ removeChannelParticipant (ChannelParticipants cp) name channel = do
       putStrLn $ "Tried to remove participant from non-existent channel: " ++ channel
 
 -- | fetchChannelParticipants - gets all participants of a given channel
---
 fetchChannelParticipants :: ChannelParticipants -> String -> IO [String]
 fetchChannelParticipants (ChannelParticipants cp) channel = do
   channels <- takeMVar cp
@@ -60,7 +57,6 @@ fetchChannelParticipants (ChannelParticipants cp) channel = do
     Nothing  -> return []
 
 -- | fetchAllChannelNames - gets all current channels 
---
 fetchAllChannelNames :: ChannelParticipants -> IO [String]
 fetchAllChannelNames (ChannelParticipants cp) = do
   channels <- takeMVar cp
@@ -68,7 +64,6 @@ fetchAllChannelNames (ChannelParticipants cp) = do
   return $ Map.keys channels
 
 -- | newChannelMap - creates a new ChannelParticipants
---
 newChannelMap :: IO ChannelParticipants
 newChannelMap = do
   m <- newMVar Map.empty

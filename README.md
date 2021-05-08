@@ -20,7 +20,7 @@ Handles the server side of the project creating the Subscriber and Publisher soc
 git clone https://git.gvk.idi.ntnu.no/course/prog2006/as/denniskr/ircmq-boys/server-haskell.git
 ```
 
-### Installation and run instructions - Windows
+### Installation - Windows
 
 **source:** https://www.haskell.org/platform/windows.html
 
@@ -55,7 +55,7 @@ git clone https://git.gvk.idi.ntnu.no/course/prog2006/as/denniskr/ircmq-boys/ser
 
 https://git.gvk.idi.ntnu.no/course/prog2006/prog2006-2021/-/issues/40
 
-### Installation instructions - Linux
+### Installation - Linux
 
 **Clone the repo into a clean directory**
 
@@ -93,7 +93,7 @@ source: https://www.haskell.org/platform/linux.html
   wget -qO- https://get.haskellstack.org/ | sh
   ```
 
-### Installation instructions - MacOS
+### Installation - MacOS
 
 **Clone the repo into a clean directory**
 
