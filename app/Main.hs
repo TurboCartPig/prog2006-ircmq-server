@@ -40,8 +40,11 @@ main = runZMQ $ do
             send responder [] "ACK"
             liftIO $ insertChannelParticipant channels name channel
             members <- liftIO (fetchChannelParticipants channels channel)
+            channels <- liftIO (fetchAllChannelNames channels)
             send publisher [SendMore] (B.pack channel)
-            send publisher [] (C.toStrict . encode $ ResponseMembers {members})
+            send publisher [SendMore] (C.toStrict . encode $ ResponseMembers {members})
+            send publisher [] (C.toStrict . encode $ ResponseChannels {channels})
+
 
           -- Goodbye is the final message from the client,
           -- so remove them from the channel participants and acknowledge the message.
@@ -49,8 +52,10 @@ main = runZMQ $ do
             send responder [] "ACK"
             liftIO $ removeChannelParticipant channels name channel
             members <- liftIO (fetchChannelParticipants channels channel)
+            channels <- liftIO (fetchAllChannelNames channels)
             send publisher [SendMore] (B.pack channel)
-            send publisher [] (C.toStrict . encode $ ResponseMembers {members})
+            send publisher [SendMore] (C.toStrict . encode $ ResponseMembers {members})
+            send publisher [] (C.toStrict . encode $ ResponseChannels {channels})
 
           -- Acknowledge receiving the message,
           -- and pass it on to all clients.
@@ -112,6 +117,13 @@ fetchChannelParticipants (ChannelParticipants cp) channel = do
   case res of
     Just chn -> return chn
     Nothing  -> return []
+
+fetchAllChannelNames :: ChannelParticipants -> IO [String]
+fetchAllChannelNames (ChannelParticipants cp) = do
+  channels <- takeMVar cp
+  putMVar cp channels
+  return $ Map.keys channels
+
 
 newChannelMap :: IO ChannelParticipants
 newChannelMap = do

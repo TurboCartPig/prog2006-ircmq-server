@@ -19,6 +19,10 @@ data MessageType
   | ResponseMembers { members :: [String] }
   -- | Final message from a client, notifying the server, that the client is disconnecting.
   | Goodbye { name :: String, channel :: String }
+  -- | Request a list of all the channels on the current server.
+  | RequestChannels
+  -- | Response from the server, containing a list of channels on the server.
+  | ResponseChannels { channels :: [String] }
   deriving(Generic, Show)
 
 instance ToJSON MessageType where
