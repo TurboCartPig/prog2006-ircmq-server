@@ -1,18 +1,19 @@
 {-# LANGUAGE NamedFieldPuns    #-}
 {-# LANGUAGE OverloadedStrings #-}
-module Handlers
-    ( hello
-    , goodbye
-    , Handlers.message
-    , reqMembers
-    ) where
 
-import Message
-import Data
-import           System.ZMQ4.Monadic
+module Handlers (
+  hello,
+  goodbye,
+  Handlers.message,
+  reqMembers,
+) where
+
+import           Data
 import           Data.Aeson
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.Lazy  as C
+import           Message
+import           System.ZMQ4.Monadic
 
 -- | sendPub -
 sendPub :: Sender t => String -> [String] -> [String] -> String -> Socket z t -> ZMQ z ()
@@ -21,7 +22,6 @@ sendPub channel members channels broadcast publisher = do
   send publisher [] (C.toStrict . encode $ ResponseMembers {members})
   send publisher [SendMore] (B.pack broadcast)
   send publisher [] (C.toStrict . encode $ ResponseChannels {channels})
-
 
 -- | mHello -
 -- Hello is the first message from the client,
@@ -33,6 +33,8 @@ hello name channel responder publisher channels = do
   members <- liftIO (fetchChannelParticipants channels channel)
   channels <- liftIO (fetchAllChannelNames channels)
   sendPub channel members channels broadcast publisher
+  send publisher [SendMore] (B.pack channel)
+  send publisher [] (C.toStrict . encode $ Hello { name, channel })
 
 -- | mGoodbye -
 -- Goodbye is the final message from the client,
@@ -44,6 +46,8 @@ goodbye name channel responder publisher channels = do
   members <- liftIO (fetchChannelParticipants channels channel)
   channels <- liftIO (fetchAllChannelNames channels)
   sendPub channel members channels broadcast publisher
+  send publisher [SendMore] (B.pack channel)
+  send publisher [] (C.toStrict . encode $ Goodbye { name, channel })
 
 -- | mMessage -
 -- Acknowledge receiving the message,

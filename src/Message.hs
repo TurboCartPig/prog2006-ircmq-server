@@ -1,13 +1,12 @@
-{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE DeriveGeneric #-}
 
-module Message
-    ( MessageType(..)
-    , broadcast
-    ) where
+module Message (
+  MessageType(..),
+  broadcast,
+) where
 
 import           Data.Aeson
 import           GHC.Generics
-
 
 -- | Messages to be serialized and sent to the client.
 data MessageType

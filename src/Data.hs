@@ -1,17 +1,15 @@
-module Data
-    ( insertChannelParticipant
-    , removeChannelParticipant
-    , fetchChannelParticipants
-    , fetchAllChannelNames
-    , newChannelMap
-    , ChannelParticipants
-    ) where
-
+module Data (
+  insertChannelParticipant,
+  removeChannelParticipant,
+  fetchChannelParticipants,
+  fetchAllChannelNames,
+  newChannelMap,
+  ChannelParticipants,
+) where
 
 import           Control.Concurrent
-import qualified Data.Map              as Map
-import Message
-
+import qualified Data.Map           as Map
+import           Message
 
 newtype ChannelParticipants = ChannelParticipants (MVar (Map.Map String [String]))
 
@@ -75,5 +73,5 @@ fetchAllChannelNames (ChannelParticipants cp) = do
 --
 newChannelMap :: IO ChannelParticipants
 newChannelMap = do
-  m <- newMVar (Map.empty)
+  m <- newMVar Map.empty
   return (ChannelParticipants m)
