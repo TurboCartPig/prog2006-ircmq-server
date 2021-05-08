@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 83aed1f4c438bc7c10d0b462f7f06a946d837f6aadd9e87c386bfc6862186181
+-- hash: 0b9199e268e418a83261891559bc21920e36b7bb9d722eead0990baa035337b3
 
 name:           server-haskell
 version:        0.1.0.0
@@ -20,6 +20,8 @@ extra-source-files:
 
 library
   exposed-modules:
+      Data
+      Handlers
       Lib
       Message
   other-modules:

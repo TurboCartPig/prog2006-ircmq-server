@@ -8,6 +8,7 @@ module Message
 import           Data.Aeson
 import           GHC.Generics
 
+
 -- | Messages to be serialized and sent to the client.
 data MessageType
   -- | Initial message sent when a client first connects.
