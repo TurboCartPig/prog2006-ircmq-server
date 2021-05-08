@@ -43,7 +43,7 @@ main = runZMQ $ do
             channels <- liftIO (fetchAllChannelNames channels)
             send publisher [SendMore] (B.pack channel)
             send publisher [] (C.toStrict . encode $ ResponseMembers {members})
-            send publisher [SendMore] (B.pack channel)
+            send publisher [SendMore] (B.pack "")
             send publisher [] (C.toStrict . encode $ ResponseChannels {channels})
 
 
