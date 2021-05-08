@@ -107,6 +107,7 @@ removeChannelParticipant (ChannelParticipants cp) name channel = do
 fetchChannelParticipants :: ChannelParticipants -> String -> IO [String]
 fetchChannelParticipants (ChannelParticipants cp) channel = do
   channels <- takeMVar cp
+  putMVar cp channels
   let res = Map.lookup channel channels
   case res of
     Just chn -> return chn
