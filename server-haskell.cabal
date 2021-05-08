@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0b9199e268e418a83261891559bc21920e36b7bb9d722eead0990baa035337b3
+-- hash: 5c7f944003024673cb2ab0dc762c787a658764635555e020729809e097007bf3
 
 name:           server-haskell
 version:        0.1.0.0
@@ -22,14 +22,13 @@ library
   exposed-modules:
       Data
       Handlers
-      Lib
       Message
   other-modules:
       Paths_server_haskell
   hs-source-dirs:
       src
   build-depends:
-      aeson >=1.5 && <1.6
+      aeson ==1.5.*
     , base >=3 && <5
     , bytestring
     , containers
@@ -45,7 +44,7 @@ executable server-haskell-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson >=1.5 && <1.6
+      aeson ==1.5.*
     , base >=3 && <5
     , bytestring
     , containers
@@ -63,7 +62,7 @@ test-suite server-haskell-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson >=1.5 && <1.6
+      aeson ==1.5.*
     , base >=3 && <5
     , bytestring
     , containers

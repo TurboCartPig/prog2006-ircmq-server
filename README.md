@@ -4,13 +4,13 @@ Handles the server side of the project creating the Subscriber and Publisher soc
 
 ## Features
 
-[_] - Hello message when a user enters a channel
+- [x]  Hello message when a user enters a channel
 
-[_] - Goodbye message when a user leaves a channel
+- [x]  Goodbye message when a user leaves a channel
 
-[_] - Acknowledges a recieved message. This gets passed to all clients in that channel
+- [x]  Acknowledges a recieved message. This gets passed to all clients in that channel
 
-[_] - List of all channels participants
+- [x]  List of all channels participants
 
 ## Instructions
 

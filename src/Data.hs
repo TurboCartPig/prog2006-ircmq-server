@@ -9,12 +9,10 @@ module Data (
 
 import           Control.Concurrent
 import qualified Data.Map           as Map
-import           Message
 
 newtype ChannelParticipants = ChannelParticipants (MVar (Map.Map String [String]))
 
---
--- | insertChannelParticipant -
+-- | insertChannelParticipant - inserts a participant to a channel
 --
 insertChannelParticipant :: ChannelParticipants -> String -> String -> IO ()
 insertChannelParticipant (ChannelParticipants cp) name channel = do
@@ -32,7 +30,7 @@ insertChannelParticipant (ChannelParticipants cp) name channel = do
       putMVar cp channels'
       putStrLn ("New participant added to the new channel: " ++ channel)
 
--- | removeChannelParticipant -
+-- | removeChannelParticipant - removes a participant from a channel
 --
 removeChannelParticipant :: ChannelParticipants -> String -> String -> IO ()
 removeChannelParticipant (ChannelParticipants cp) name channel = do
@@ -42,7 +40,7 @@ removeChannelParticipant (ChannelParticipants cp) name channel = do
     -- Remove from channel
     Just chn -> do
       let new_channel = filter (/= name) chn
-      let channels' = Map.insert channel new_channel channels
+      let channels' = Map.insert channel (filter (/= name) chn) channels
       putMVar cp channels'
       putStrLn $ "Removing participant from channel: " ++ channel
 
@@ -50,7 +48,7 @@ removeChannelParticipant (ChannelParticipants cp) name channel = do
       putMVar cp channels
       putStrLn $ "Tried to remove participant from non-existent channel: " ++ channel
 
--- | fetchChannelParticipants -
+-- | fetchChannelParticipants - gets all participants of a given channel
 --
 fetchChannelParticipants :: ChannelParticipants -> String -> IO [String]
 fetchChannelParticipants (ChannelParticipants cp) channel = do
@@ -61,7 +59,7 @@ fetchChannelParticipants (ChannelParticipants cp) channel = do
     Just chn -> return chn
     Nothing  -> return []
 
--- | fetchAllChannelNames -
+-- | fetchAllChannelNames - gets all current channels 
 --
 fetchAllChannelNames :: ChannelParticipants -> IO [String]
 fetchAllChannelNames (ChannelParticipants cp) = do
@@ -69,7 +67,7 @@ fetchAllChannelNames (ChannelParticipants cp) = do
   putMVar cp channels
   return $ Map.keys channels
 
--- | newChannelMap -
+-- | newChannelMap - creates a new ChannelParticipants
 --
 newChannelMap :: IO ChannelParticipants
 newChannelMap = do
