@@ -42,7 +42,8 @@ main = runZMQ $ do
             members <- liftIO (fetchChannelParticipants channels channel)
             channels <- liftIO (fetchAllChannelNames channels)
             send publisher [SendMore] (B.pack channel)
-            send publisher [SendMore] (C.toStrict . encode $ ResponseMembers {members})
+            send publisher [] (C.toStrict . encode $ ResponseMembers {members})
+            send publisher [SendMore] (B.pack channel)
             send publisher [] (C.toStrict . encode $ ResponseChannels {channels})
 
 
@@ -54,7 +55,8 @@ main = runZMQ $ do
             members <- liftIO (fetchChannelParticipants channels channel)
             channels <- liftIO (fetchAllChannelNames channels)
             send publisher [SendMore] (B.pack channel)
-            send publisher [SendMore] (C.toStrict . encode $ ResponseMembers {members})
+            send publisher [] (C.toStrict . encode $ ResponseMembers {members})
+            send publisher [SendMore] (B.pack channel)
             send publisher [] (C.toStrict . encode $ ResponseChannels {channels})
 
           -- Acknowledge receiving the message,
