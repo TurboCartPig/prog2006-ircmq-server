@@ -39,13 +39,18 @@ main = runZMQ $ do
           Just (Hello   name channel) -> do
             send responder [] "ACK"
             liftIO $ insertChannelParticipant channels name channel
+            members <- liftIO (fetchChannelParticipants channels channel)
+            send publisher [SendMore] (B.pack channel)
+            send publisher [] (C.toStrict . encode $ ResponseMembers {members})
 
           -- Goodbye is the final message from the client,
           -- so remove them from the channel participants and acknowledge the message.
           Just (Goodbye name channel) -> do
             send responder [] "ACK"
             liftIO $ removeChannelParticipant channels name channel
-            liftIO $ putStrLn $ "FUCK"
+            members <- liftIO (fetchChannelParticipants channels channel)
+            send publisher [SendMore] (B.pack channel)
+            send publisher [] (C.toStrict . encode $ ResponseMembers {members})
 
           -- Acknowledge receiving the message,
           -- and pass it on to all clients.
