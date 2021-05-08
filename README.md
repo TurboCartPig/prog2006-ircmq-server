@@ -51,6 +51,10 @@ git clone https://git.gvk.idi.ntnu.no/course/prog2006/as/denniskr/ircmq-boys/ser
   https://get.haskellstack.org/stable/windows-x86_64-installer.exe
   ```
 
+**Specific instructions for ZeroMQ on Windows - Curtesy Dennis Kristiansen**
+
+https://git.gvk.idi.ntnu.no/course/prog2006/prog2006-2021/-/issues/40
+
 ### Installation instructions - Linux
 
 **Clone the repo into a clean directory**
