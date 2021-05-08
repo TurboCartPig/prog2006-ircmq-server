@@ -1,8 +1,9 @@
 {-# LANGUAGE DeriveGeneric     #-}
 
-module Message (
-    MessageType(..)
-) where
+module Message
+    ( MessageType(..)
+    , broadcast
+    ) where
 
 import           Data.Aeson
 import           GHC.Generics
@@ -24,6 +25,8 @@ data MessageType
   -- | Response from the server, containing a list of channels on the server.
   | ResponseChannels { channels :: [String] }
   deriving(Generic, Show)
+
+broadcast = "broadcast" :: String
 
 instance ToJSON MessageType where
   toEncoding = genericToEncoding defaultOptions
