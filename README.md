@@ -18,7 +18,7 @@ For this project, some tests where written for the JSON parsing implemented. Run
 stack test
 ```
 
-Implementing further tests on the other functionality was difficult due to the fact that this is a chat application, which entails the usage of IO in Haskell. ZeroMQs monadic variables are also wrapped in IO. Reflecting on this, we would say that Haskell might not be the optimal language to use for this kind of development. 
+Implementing further tests on the other functionality was difficult due to the fact that this is a chat application, which entails the usage of IO in Haskell. Because our entire "business logic" (on the server side) is about handling the different server actions, and because we are using multiple different sockets, we had to use MVars (Monadic variables) for handling our "states". MVars is also wrapped in IO and this lead the entire server application to be wrapped in IO. Reflecting on this, we would say that Haskell might not be the optimal language to use for this kind of server program. 
 
 ## Instructions
 
