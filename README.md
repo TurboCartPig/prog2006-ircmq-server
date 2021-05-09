@@ -1,6 +1,6 @@
 # Haskell server for IRCMQ by IRCMQ boys
 
-Handles the server side of the project creating the Subscriber and Publisher sockets for zeromq. Takes in a message from the client in a JSON format. 
+Server side of the project creating the Subscriber and Publisher sockets for zeromq. Takes in a message from the client in a JSON format. 
 
 ## Features
 
