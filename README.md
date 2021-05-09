@@ -141,12 +141,6 @@ source: https://docs.haskellstack.org/en/stable/README/
 stack run
 ```
 
-* Run the tests
-
-```
-stack test
-```
-
 ### Documentation
 
 Haddock has been used as the documentation standard for the program. With stack installed, you have this available for building by running (inside the project directory):
