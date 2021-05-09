@@ -9,7 +9,7 @@ import Message
 main :: IO ()
 main = hspec $ do
   serialize_json_to_string
-  deserialize_bytes_to_string
+  deserialize_string_to_json
 
 serialize_json_to_string :: Spec
 serialize_json_to_string = do
