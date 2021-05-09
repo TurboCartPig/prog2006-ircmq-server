@@ -4,13 +4,12 @@ Server side of the project creating the Subscriber and Publisher sockets for zer
 
 ## Features
 
-- [x]  Hello message when a user enters a channel
-
-- [x]  Goodbye message when a user leaves a channel
-
-- [x]  Acknowledges a recieved message. This gets passed to all clients in that channel
-
-- [x]  List of all channels participants
+| Feature | Implemented |
+|--|--|
+| Hello message when a user enters a channel | ✔ |
+| Goodbye message when a user leaves a channel | ✔ |
+| Acknowledges a received message. This gets passed to all clients in that channel | ✔ |
+| List of all channels participants | ✔ |
 
 ## Testing
 
