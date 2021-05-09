@@ -13,6 +13,7 @@ import           Handlers
 import           Message
 import           System.ZMQ4.Monadic
 
+-- | handleMessageType - handles the type of message and sends it to the appropriate function
 handleMessageType :: (Sender t, Sender t2) => B.ByteString -> Socket z t -> Socket z t2 -> ChannelParticipants -> ZMQ z ()
 handleMessageType buffer responder publisher channels = do
   -- Deserialize the message into a MessageType

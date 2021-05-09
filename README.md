@@ -1,16 +1,24 @@
 # Haskell server for IRCMQ by IRCMQ boys
 
-Handles the server side of the project creating the Subscriber and Publisher sockets for zeromq. Takes in a message from the client in a JSON format. 
+Server side of the project creating the Subscriber and Publisher sockets for zeromq. Takes in a message from the client in a JSON format. 
 
 ## Features
 
-- [x]  Hello message when a user enters a channel
+| Feature | Implemented |
+|--|--|
+| Hello message when a user enters a channel | ✔ |
+| Goodbye message when a user leaves a channel | ✔ |
+| Acknowledges a received message. This gets passed to all clients in that channel | ✔ |
+| List of all channels participants | ✔ |
 
-- [x]  Goodbye message when a user leaves a channel
+## Testing
 
-- [x]  Acknowledges a recieved message. This gets passed to all clients in that channel
+For this project, some tests where written for the JSON parsing implemented. Run command:
+```
+stack test
+```
 
-- [x]  List of all channels participants
+Implementing further tests on the other functionality was difficult due to the fact that this is a chat application, which entails the usage of IO in Haskell. ZeroMQs monadic variables are also wrapped in IO. Reflecting on this, we would say that Haskell might not be the optimal language to use for this kind of development. 
 
 ## Instructions
 
@@ -20,7 +28,7 @@ Handles the server side of the project creating the Subscriber and Publisher soc
 git clone https://git.gvk.idi.ntnu.no/course/prog2006/as/denniskr/ircmq-boys/server-haskell.git
 ```
 
-### Installation and run instructions - Windows
+### Installation - Windows
 
 **source:** https://www.haskell.org/platform/windows.html
 
@@ -55,7 +63,7 @@ git clone https://git.gvk.idi.ntnu.no/course/prog2006/as/denniskr/ircmq-boys/ser
 
 https://git.gvk.idi.ntnu.no/course/prog2006/prog2006-2021/-/issues/40
 
-### Installation instructions - Linux
+### Installation - Linux
 
 **Clone the repo into a clean directory**
 
@@ -93,7 +101,7 @@ source: https://www.haskell.org/platform/linux.html
   wget -qO- https://get.haskellstack.org/ | sh
   ```
 
-### Installation instructions - MacOS
+### Installation - MacOS
 
 **Clone the repo into a clean directory**
 
