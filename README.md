@@ -2,17 +2,6 @@
 
 Handles the server side of the project creating the Subscriber and Publisher sockets for zeromq. Takes in a message from the client in a JSON format. 
 
-| App name | Description          | Requirements   |
-|:---------|:---------------------|:---------------|
-| App 1    | Description text 1.  | Requirements 1 |
-| App 2    | Description text 2.  | None           |
-
-**{dotted-circle}** No
-
-**{check-circle}** Yes
-
-**{tanuki}**
-
 ## Features
 
 - [x]  Hello message when a user enters a channel
