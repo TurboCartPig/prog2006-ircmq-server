@@ -31,14 +31,14 @@ serialize_json_to_string = do
       show (encode $ ResponseChannels {channels}) `shouldBe` "\"{\\\"tag\\\":\\\"ResponseChannels\\\",\\\"channels\\\":[\\\"Channel #1\\\",\\\"Channel #2\\\"]}\""
 
 
-deserialize_bytes_to_string :: Spec
-deserialize_bytes_to_string = do
+deserialize_string_to_json :: Spec
+deserialize_string_to_json = do
   let name = "Bob"
   let channel = "Channel #1"
   let content = "Hello world!"
   let members = ["Bob","Dave"]
   let channels = ["Channel #1", "Channel #2"]
-  describe "Deserialize bytes to strings" $ do
+  describe "Deserialize strings to json" $ do
     it "Works for Hello" $ do
       show (decodeStrict "{\"tag\":\"Hello\",\"name\":\"Bob\",\"channel\":\"Channel #1\"}" :: Maybe MessageType) `shouldBe` show (Just Hello {name, channel})
     it "Works for Message" $ do
