@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5c7f944003024673cb2ab0dc762c787a658764635555e020729809e097007bf3
+-- hash: fb477a4c5c51948d761704a600260e403da88bc7dae3ca9e7405c05dda6656f9
 
 name:           server-haskell
 version:        0.1.0.0
@@ -28,7 +28,7 @@ library
   hs-source-dirs:
       src
   build-depends:
-      aeson ==1.5.*
+      aeson >=1.5 && <1.6
     , base >=3 && <5
     , bytestring
     , containers
@@ -44,7 +44,7 @@ executable server-haskell-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson ==1.5.*
+      aeson >=1.5 && <1.6
     , base >=3 && <5
     , bytestring
     , containers
@@ -62,10 +62,11 @@ test-suite server-haskell-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson ==1.5.*
+      aeson >=1.5 && <1.6
     , base >=3 && <5
     , bytestring
     , containers
+    , hspec
     , mtl
     , server-haskell
     , zeromq4-haskell

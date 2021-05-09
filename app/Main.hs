@@ -20,7 +20,6 @@ handleMessageType buffer responder publisher channels = do
     Just (Hello   name channel)         -> Handlers.hello name channel responder publisher channels
     Just (Goodbye name channel)         -> Handlers.goodbye name channel responder publisher channels
     Just (Message name channel content) -> Handlers.message name channel content responder publisher
-    Just (RequestMembers channel)       -> Handlers.reqMembers channel channels responder
     _                                   -> do
                                           send responder [] "WHAT"
                                           liftIO (putStrLn "NOT A MESSAGE")
