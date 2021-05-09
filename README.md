@@ -12,6 +12,15 @@ Server side of the project creating the Subscriber and Publisher sockets for zer
 
 - [x]  List of all channels participants
 
+## Testing
+
+For this project, some tests where written for the JSON parsing implemented. Run command:
+```
+stack test
+```
+
+Implementing further tests on the other functionality was difficult due to the fact that this is a chat application, which entails the usage of IO in Haskell. ZeroMQs monadic variables are also wrapped in IO. Reflecting on this, we would say that Haskell might not be the optimal language to use for this kind of development. 
+
 ## Instructions
 
 **Clone the repo into a clean directory**
